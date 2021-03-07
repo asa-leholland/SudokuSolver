@@ -82,20 +82,7 @@ blank_puzzle = [
 # [0,0,0, 0,0,0, 0,0,0]
 # ]
 
-# Solved Puzzle
-solved_puzzle = [
-[1,2,3, 4,5,6, 7,8,9],
-[4,5,6, 7,8,9, 1,2,3],
-[7,8,9, 1,3,4, 4,5,6],
 
-[2,3,4, 5,6,7, 8,9,1],
-[5,6,7, 8,9,1, 2,3,4],
-[8,9,1, 3,4,4, 5,6,7],
-
-[3,4,5, 6,7,8, 9,1,2],
-[6,7,8, 9,1,2, 3,4,5],
-[9,1,3, 4,4,5, 6,7,8],
-]
 
 class SudokuTestMethods(unittest.TestCase):
 
@@ -128,13 +115,22 @@ class SudokuTestMethods(unittest.TestCase):
 
 	def test_solved_solving(self):
 		# Test that an already solved sudoku puzzle correctly returns True when attempted to solve
-		attempt = solved_puzzle
+		attempt = solution
 		self.assertEqual(main_sudoku.solve_sudoku(board_to_solve=attempt), True)
 
 	def test_blank_solving(self):
 		# Test that solution can be obtained from a fully blank sudoku board when attempted to solve
 		attempt = blank_puzzle
 		self.assertEqual(main_sudoku.solve_sudoku(board_to_solve=attempt), True)
+
+	def test_validate_valid_board(self):
+		# Test that a valid board proudces the correct result
+		attempt = solution
+		actual_result = main_sudoku.is_valid_sudoku(board_to_test=attempt)['is_valid']
+		expected_result = True
+		self.assertEqual(actual_result, expected_result)
+
+	
 
 # When run as a script, run the test cases
 if __name__ == '__main__':

@@ -160,7 +160,7 @@ def is_valid_sudoku(board_to_test):
 			board_to_test[row][col] = 0
 
 			# Then attempt to put the same value back in the board
-			if not is_placement_possible(y=row, x=col, n=temp, board=board_to_solve):
+			if not is_placement_possible(y=row, x=col, n=temp, board=board_to_test):
 
 				# If it is not possible to place this value in the board, then the provided board is not valid
 				return {'is_valid': False, 'invalid_row': row, 'invalid_column': col, 'invalid_digit': temp}
