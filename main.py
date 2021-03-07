@@ -132,3 +132,39 @@ def solve_sudoku(board_to_solve):
 	return False
 
 
+def is_valid_sudoku(board_to_test):
+	"""
+	Provided a sudoku board, determine if it is a valid, complete solution.
+	:param board_to_test: a 9x9 array representing a sudoku board for which we want to determine validity
+	:return: A dictionary containing the following key value pairs:
+		'is_valid': True if the provided board is valid or False if the board is not valid
+		'invalid_row': integer of the index of the first invalid row found
+		'invalid_column': integer of the index of the first invalid column found
+		'invalid_digit': the invalid digit placed at the invalid row and column
+	"""
+
+	# iterate over rows (y values)
+	for row in range(9):
+		# iterate over columns (x values)
+		for col in range(9):
+
+			# First, check that the cell at the current row and column is not empty
+			if board_to_test[row][col] == 0:
+
+				# If the cell is not filled, then the provided board is not complete. Therefore it is not valid.
+				return {'is_valid': False, 'invalid_row': row, 'invalid_column': col, 'invalid_digit': 0}
+
+			# Then, check the value of the cell.
+			# Remove the value of the cell and store it as a temp variable.
+			temp = board_to_test[row][col]
+			board_to_test[row][col] = 0
+
+			# Then attempt to put the same value back in the board
+			if not is_placement_possible(y=row, x=col, n=temp, board=board_to_solve):
+
+				# If it is not possible to place this value in the board, then the provided board is not valid
+				return {'is_valid': False, 'invalid_row': row, 'invalid_column': col, 'invalid_digit': temp}
+
+	# If all cells are valid, then we can return True.
+	# Return an empty coordinate set 
+	return {'is_valid': True, 'invalid_row': None, 'invalid_column': None, 'invalid_digit': None}
