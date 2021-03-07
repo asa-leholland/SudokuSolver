@@ -1,0 +1,19 @@
+# Sudoku
+
+# Rules of Sudoku
+
+The goal of Sudoku is to completely fill a 9×9 grid with digits. When filled with valid digits, every column, every row, and every 3×3 subgrid that compose the game board contain each digit from 1 to 9. The Sudoku player is provided a grid which is partially complete (some cells are left blank), and the Sudoku player aims to fill in the grid with valid digits so that the puzzle can be completed. If enough blanks are present when the board is first presented, it is possible for multiple valid solutions to exist for a single board, but a good instance of a Sudoku puzzle has only one single valid solution.
+
+Implement a program that allows the user to solve the puzzle. The puzzle should be in its standard size, if any. For example, if you choose Sudoko, the size should be 9X9.
+Include in your program an algorithm that verifies the user's solution to the puzzle. The algorithm takes the solved version of the puzzle board as input and verifies the solution. Your algorithm should return "Solved!" (or similar text of your choice) if the input board provided is solved correctly, else return "Not Solved, Try Again!" (or similar). Include a README file with your code
+Prove the correctness of the algorithm that you wrote to verify the solution.
+Discuss the time complexity of the verification algorithm?
+
+
+
+
+Bonus:
+
+Implement a code to find one solution to the puzzle. Given a puzzle board for the puzzle that you chose in 1, return one solution to that puzzle, if any.
+Discuss the time complexity of the solving algorithm?
+Implement your program using GUI. If you choose to use a tool that will not run on the Engineering servers, please submit your code and the README file on Canvas.
