@@ -1,6 +1,7 @@
+# test.py
+# Author: Asa LeHolland
 import unittest
 import main as main_sudoku
-
 
 # Puzzle Source: https://dingo.sbs.arizona.edu/~sandiway/sudoku/examples.html
 puzzle = [
@@ -33,6 +34,69 @@ solution = [
 ]
 
 
+# Impossible Puzzle
+# Source: https://www.sudokudragon.com/unsolvable.htm
+impossible_puzzle = [
+[5,1,6, 8,4,9, 7,3,2],
+[3,0,7, 6,0,5, 0,0,0],
+[8,0,9, 7,0,0, 0,5,6],
+
+[1,3,5, 0,6,0, 9,0,7],
+[4,7,2, 5,9,1, 0,0,6],
+[9,6,8, 3,7,0, 0,5,0],
+
+[2,5,3, 1,8,6, 0,7,4],
+[6,8,4, 2,0,7, 5,0,0],
+[7,9,1, 0,5,0, 6,0,8]
+]
+
+
+# Blank Puzzle
+blank_puzzle = [
+[0,0,0, 0,0,0, 0,0,0],
+[0,0,0, 0,0,0, 0,0,0],
+[0,0,0, 0,0,0, 0,0,0],
+
+[0,0,0, 0,0,0, 0,0,0],
+[0,0,0, 0,0,0, 0,0,0],
+[0,0,0, 0,0,0, 0,0,0],
+
+[0,0,0, 0,0,0, 0,0,0],
+[0,0,0, 0,0,0, 0,0,0],
+[0,0,0, 0,0,0, 0,0,0]
+]
+
+# # Puzzle with Multiple soltutions
+# # Source: https://www.sudokudragon.com/unsolvable.htm
+# blank_puzzle = [
+# [0,0,0, 0,0,0, 0,0,0],
+# [0,0,0, 0,0,0, 0,0,0],
+# [0,0,0, 0,0,0, 0,0,0],
+
+# [0,0,0, 0,0,0, 0,0,0],
+# [0,0,0, 0,0,0, 0,0,0],
+# [0,0,0, 0,0,0, 0,0,0],
+
+# [0,0,0, 0,0,0, 0,0,0],
+# [0,0,0, 0,0,0, 0,0,0],
+# [0,0,0, 0,0,0, 0,0,0]
+# ]
+
+# Solved Puzzle
+solved_puzzle = [
+[1,2,3, 4,5,6, 7,8,9],
+[4,5,6, 7,8,9, 1,2,3],
+[7,8,9, 1,3,4, 4,5,6],
+
+[2,3,4, 5,6,7, 8,9,1],
+[5,6,7, 8,9,1, 2,3,4],
+[8,9,1, 3,4,4, 5,6,7],
+
+[3,4,5, 6,7,8, 9,1,2],
+[6,7,8, 9,1,2, 3,4,5],
+[9,1,3, 4,4,5, 6,7,8],
+]
+
 class SudokuTestMethods(unittest.TestCase):
 
 	def test_valid_placement(self):
@@ -57,6 +121,21 @@ class SudokuTestMethods(unittest.TestCase):
 		main_sudoku.solve_sudoku(board_to_solve=attempt)
 		self.assertEqual(attempt, solution)
 
+	def test_impossible_solving(self):
+		# Test that an impossible sudokue puzzle correctly returns False when attempted to solve
+		attempt = impossible_puzzle
+		self.assertEqual(main_sudoku.solve_sudoku(board_to_solve=attempt), False)
+
+	def test_solved_solving(self):
+		# Test that an already solved sudoku puzzle correctly returns True when attempted to solve
+		attempt = solved_puzzle
+		self.assertEqual(main_sudoku.solve_sudoku(board_to_solve=attempt), True)
+
+	def test_blank_solving(self):
+		# Test that solution can be obtained from a fully blank sudoku board when attempted to solve
+		attempt = blank_puzzle
+		self.assertEqual(main_sudoku.solve_sudoku(board_to_solve=attempt), True)
+		main_sudoku.npdisplay(attempt)
 
 # When run as a script, run the test cases
 if __name__ == '__main__':

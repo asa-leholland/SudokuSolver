@@ -1,7 +1,7 @@
-# # main.py
-# # Author: Asa LeHolland
+# main.py
+# Author: Asa LeHolland
 
-
+# import numpy to handle array board
 import numpy as np 
 
 
@@ -86,6 +86,9 @@ def find_empty_location(board, coordinates):
 	
 
 def solve_sudoku(board_to_solve):
+	"""
+	Provided an unfinished sudoku puzzle
+	"""
 		
 
 	# define the current coordinates of the Sudoku cell we are examining. 
