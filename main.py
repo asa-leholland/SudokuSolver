@@ -143,6 +143,8 @@ def is_valid_sudoku(board_to_test):
 		'invalid_digit': the invalid digit placed at the invalid row and column
 	"""
 
+	# save a duplicate of the test board, that way we can check the validity without modifying the  
+
 	# iterate over rows (y values)
 	for row in range(9):
 		# iterate over columns (x values)
@@ -164,6 +166,9 @@ def is_valid_sudoku(board_to_test):
 
 				# If it is not possible to place this value in the board, then the provided board is not valid
 				return {'is_valid': False, 'invalid_row': row, 'invalid_column': col, 'invalid_digit': temp}
+
+			# If it was valid, replace the number and continue searching
+			board_to_test[row][col] = temp
 
 	# If all cells are valid, then we can return True.
 	# Return an empty coordinate set 
