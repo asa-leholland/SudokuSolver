@@ -3,7 +3,7 @@
 
 import random
 
-puzzles = {
+puzzles = [
 
 	{
 	'puzzle_name': 'Very, Very Easy Sudoku',
@@ -52,7 +52,7 @@ puzzles = {
 	# 			[0,4,0, 0,5,0, 0,3,6],
 	# 			[7,0,3, 0,1,8, 0,0,0]	]
 	# }, 
-}
+]
 
 def welcome():
 	"""
@@ -62,9 +62,39 @@ def welcome():
 
 
 def describe_sudoku():
+	print('Sudoku is')
+
+
+
+def load_sudoku_board(board_to_load):
+	print(board_to_load)
 
 
 def load_random_sudoku():
+	selection = random.choice(puzzles)
+
+	selection_prompt = f"""
+	You have selected a Sudoku puzzle called '{selection['puzzle_name']}'. 
+	This source of this puzzle is {selection['source']}.
+	"""
+	print(selection_prompt)
+
+	load_sudoku_board(board_to_load=selection['puzzle'])
+
+
+# Modified from source: https://pynative.com/python-check-user-input-is-number-or-string
+def get_valid_int(provided_input):
+    try:
+        # Convert it into integer
+        val = int(provided_input)
+        return val
+    except ValueError:
+        try:
+            # Convert it into float
+            val = float(provided_input)
+            return val
+        except ValueError:
+            return None
 
 
 def present_options():
@@ -99,7 +129,13 @@ def present_options():
 		# 5. {option_5}
 
 
-	user_selection = input(f"""
+
+
+	running = True
+
+	while running:
+
+		print(f"""
 
 		Please enter one of the following options:
 		1. {option_1}
@@ -108,12 +144,23 @@ def present_options():
 		Or enter 'Q' to quite Console Sudoku.
 		""")
 
-	running = True
+		user_selection = input('Enter your selection: ')
 
-	while running:
+		print(user_selection)
 
-		if user_selection not in valid_selections:
-			print("Error, please select one of the provided options or enter 'Q' to quit Console Sudoku.")
+		if user_selection == 'Q':
+			running = False
+
+		validated_input = get_valid_int(provided_input=user_selection)
+
+		if validated_input is None:
+			print("Error, invalid input. Please enter a number selecting one of the provided options or enter 'Q' to quit Console Sudoku.")
+
+		elif validated_input not in valid_selections:
+			print("Error, invalid selection. Please enter one of the provided options or enter 'Q' to quit Console Sudoku.")
+
+		else:
+			valid_selections[validated_input]()
 
 
 
