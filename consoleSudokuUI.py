@@ -52,10 +52,6 @@ puzzles = {
 				[0,4,0, 0,5,0, 0,3,6],
 				[7,0,3, 0,1,8, 0,0,0]	]
 	}, 
-
-
-
-
 }
 
 def welcome():
@@ -85,5 +81,22 @@ def open_puzzle(puzzle_serial_to_open):
 	# Allow user to quit and return to puzzle selection
 
 	# Allow user to quit Console Sudoku
+	pass
+
+
+def user_solve(puzzle_for_user_to_solve):
+
+	# Allow the user to move the 'cursor'
+
+	# Allow the user to set the number in a cell
+
+	# Allow the user to submit a solution
+
+	# Allow the user to ask if the puzzle is possible
+
+	# Allow the user to quit, returning them to puzzle selection
+
+	# Allow the user to quite Console Sudoku
+	pass
 
 
