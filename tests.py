@@ -135,7 +135,6 @@ class SudokuTestMethods(unittest.TestCase):
 		# Test that solution can be obtained from a fully blank sudoku board when attempted to solve
 		attempt = blank_puzzle
 		self.assertEqual(main_sudoku.solve_sudoku(board_to_solve=attempt), True)
-		main_sudoku.npdisplay(attempt)
 
 # When run as a script, run the test cases
 if __name__ == '__main__':

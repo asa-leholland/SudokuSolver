@@ -9,7 +9,7 @@ import numpy as np
 
 def npdisplay(board):
 	"""
-	Method to convert the provided puzzle to a numpy array, which is output as a square board
+	Function to convert the provided puzzle to a numpy array, which is output as a square board
 	"""
 	print(np.matrix(board)) 
 
@@ -62,7 +62,9 @@ def is_placement_possible(y, x, n, board):
 	
 def find_empty_location(board, coordinates):
 	"""
-	Finds an empty location on the Sudoku Board
+	Finds the next empty location on the Sudoku Board
+	:param board: 9x9 array of arrays representing a sudoku board
+	:param coordinates: temp coordinates of a row and column value that will be mutated to store the coordinates of the empty location
 	:return: True if empty location is found, False if no remaining cells are found. 
 	"""
 
@@ -87,10 +89,11 @@ def find_empty_location(board, coordinates):
 
 def solve_sudoku(board_to_solve):
 	"""
-	Provided an unfinished sudoku puzzle
+	Provided an unfinished sudoku puzzle, attempt to solve the puzzle by using recursion and backtracking
+	:param board_to_solve: a 9x9 array of arrays representing a Sudoku puzzle board
+	:return: True if a valid solution is found or False if no valid solution was found
 	"""
 		
-
 	# define the current coordinates of the Sudoku cell we are examining. 
 	# Start in the upper left corner 
 	current_coords = [0, 0]
@@ -122,8 +125,10 @@ def solve_sudoku(board_to_solve):
 			# Otherwise, take away the placed digit and continue the iteration
 			board_to_solve[row][col] = 0
 			
-	# If a dead end is reached (no possible digits are placeable), then it means we made a mistake earlier
-	# backtrack to the previous call 
+	# If a dead end is reached (no possible digits are placeable), then it means 
+	# that we we made a mistake earlier in our placements 
+	# (in which case, returning False will backtrack and we can replace the value with a 0)
+	# OR there is no valid solution to this puzzle (it is impossible)
 	return False
 
 
