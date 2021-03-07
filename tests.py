@@ -179,7 +179,7 @@ class SudokuTestMethods(unittest.TestCase):
 
 		expected_result = {'is_valid': True, 'invalid_row':None, 'invalid_column':None, 'invalid_digit':None}
 		self.assertEqual(actual_result, expected_result)
-		# main_sudoku.npdisplay(board=fill_in_puzzle)
+
 
 
 	
@@ -187,3 +187,4 @@ class SudokuTestMethods(unittest.TestCase):
 # When run as a script, run the test cases
 if __name__ == '__main__':
 	unittest.main()
+

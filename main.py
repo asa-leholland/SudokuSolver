@@ -11,7 +11,7 @@ def npdisplay(board):
 	"""
 	Function to convert the provided puzzle to a numpy array, which is output as a square board
 	"""
-	print(np.matrix(board)) 
+	print(np.array(board)) 
 
 
 
