@@ -168,3 +168,36 @@ def is_valid_sudoku(board_to_test):
 	# If all cells are valid, then we can return True.
 	# Return an empty coordinate set 
 	return {'is_valid': True, 'invalid_row': None, 'invalid_column': None, 'invalid_digit': None}
+
+
+
+def confirm_puzzle_is_solvable(puzzle):
+	"""
+	Solves and validates a 
+	"""
+	if not solve_sudoku(board_to_solve=puzzle):
+		return "This particular Sudoku puzzle cannot be solved."
+
+	validation = is_valid_sudoku(board_to_test=puzzle)
+
+	if validation['is_valid']:
+		return "At least one valid solution for the provided puzzle exists."
+
+	else:
+		return "Error! The provided puzzle is possible to solve, but a valid solution was not found."
+
+
+
+def validate_user_submission(user_board):
+	"""
+	Solves and validates a user-provided board
+	"""
+	validation = is_valid_sudoku(board_to_test=user_board)
+
+	if validation['is_valid']:
+		return "The provided submission is valid! Nice work." 
+
+	else:
+		return f"""The provided submission is not valid. 
+			The digit in Row {validation['invalid_row']}, Column {validation['invalid_row']} 
+			cannot be {validation['invalid_digit']}.""" 

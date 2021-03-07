@@ -66,22 +66,6 @@ blank_puzzle = [
 [0,0,0, 0,0,0, 0,0,0]
 ]
 
-# # Puzzle with Multiple soltutions
-# # Source: https://www.sudokudragon.com/unsolvable.htm
-# blank_puzzle = [
-# [0,0,0, 0,0,0, 0,0,0],
-# [0,0,0, 0,0,0, 0,0,0],
-# [0,0,0, 0,0,0, 0,0,0],
-
-# [0,0,0, 0,0,0, 0,0,0],
-# [0,0,0, 0,0,0, 0,0,0],
-# [0,0,0, 0,0,0, 0,0,0],
-
-# [0,0,0, 0,0,0, 0,0,0],
-# [0,0,0, 0,0,0, 0,0,0],
-# [0,0,0, 0,0,0, 0,0,0]
-# ]
-
 
 
 class SudokuTestMethods(unittest.TestCase):
@@ -130,6 +114,48 @@ class SudokuTestMethods(unittest.TestCase):
 		expected_result = True
 		self.assertEqual(actual_result, expected_result)
 
+	def test_validate_incomplete_board(self):
+		# Test that an incomplete board produces the correct result
+
+		incomplete_solution = [
+		[4,3,5, 2,6,9, 7,8,1],
+		[6,8,2, 5,7,1, 4,9,3],
+		[1,9,7, 8,3,4, 5,6,2],
+
+		[8,2,6, 1,9,5, 3,4,7],
+		[3,7,4, 6,0,2, 9,1,5],
+		[9,5,1, 7,4,3, 6,2,8],
+
+		[5,1,9, 3,2,6, 8,7,4],
+		[2,4,8, 9,5,7, 1,3,6],
+		[7,6,3, 4,1,8, 2,5,9]
+		]
+
+		actual_result = main_sudoku.is_valid_sudoku(board_to_test=incomplete_solution)
+		expected_result = {'is_valid': False, 'invalid_row':4, 'invalid_column':4, 'invalid_digit':0}
+		self.assertEqual(actual_result, expected_result)
+
+
+	def test_validate_duplicated_number(self):
+		# Test that a board with an invalid duplicated number produces the correct result
+
+		incomplete_solution = [
+		[4,3,5, 2,6,9, 7,8,1],
+		[6,8,2, 5,4,1, 4,9,3],
+		[1,9,7, 8,3,4, 5,6,2],
+
+		[8,2,6, 1,9,5, 3,4,7],
+		[3,7,4, 6,8,2, 9,1,5],
+		[9,5,1, 7,4,3, 6,2,8],
+
+		[5,1,9, 3,2,6, 8,7,4],
+		[2,4,8, 9,5,7, 1,3,6],
+		[7,6,3, 4,1,8, 2,5,9]
+		]
+
+		actual_result = main_sudoku.is_valid_sudoku(board_to_test=incomplete_solution)
+		expected_result = {'is_valid': False, 'invalid_row':1, 'invalid_column':4, 'invalid_digit':4}
+		self.assertEqual(actual_result, expected_result)
 	
 
 # When run as a script, run the test cases
