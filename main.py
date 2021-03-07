@@ -195,9 +195,32 @@ def validate_user_submission(user_board):
 	validation = is_valid_sudoku(board_to_test=user_board)
 
 	if validation['is_valid']:
-		return "The provided submission is valid! Nice work." 
+		return "Solved! Nice work." 
 
 	else:
 		return f"""The provided submission is not valid. 
 			The digit in Row {validation['invalid_row']}, Column {validation['invalid_row']} 
 			cannot be {validation['invalid_digit']}.""" 
+
+
+
+if __name__ == '__main__':
+
+	fill_in_puzzle = [
+		[0,0,0, 0,0,0, 0,0,0],
+		[0,0,0, 0,0,0, 0,0,0],
+		[0,0,0, 0,0,0, 0,0,0],
+
+		[0,0,0, 1,2,3, 0,0,0],
+		[0,0,0, 4,0,6, 0,0,0],
+		[0,0,0, 7,8,9, 0,0,0],
+
+		[0,0,0, 0,0,0, 0,0,0],
+		[0,0,0, 0,0,0, 0,0,0],
+		[0,0,0, 0,0,0, 0,0,0]
+		]
+
+
+	print(solve_sudoku(board_to_solve=fill_in_puzzle))
+
+	print(fill_in_puzzle)

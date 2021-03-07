@@ -156,6 +156,32 @@ class SudokuTestMethods(unittest.TestCase):
 		actual_result = main_sudoku.is_valid_sudoku(board_to_test=incomplete_solution)
 		expected_result = {'is_valid': False, 'invalid_row':1, 'invalid_column':4, 'invalid_digit':4}
 		self.assertEqual(actual_result, expected_result)
+
+	def test_generate_solution(self):
+		# Generate a solution for an easy puzzle to add to the puzzle library
+
+		fill_in_puzzle = [
+		[0,0,0, 0,0,0, 0,0,0],
+		[0,0,0, 0,0,0, 0,0,0],
+		[0,0,0, 0,0,0, 0,0,0],
+
+		[0,0,0, 1,2,3, 0,0,0],
+		[0,0,0, 4,0,6, 0,0,0],
+		[0,0,0, 7,8,9, 0,0,0],
+
+		[0,0,0, 0,0,0, 0,0,0],
+		[0,0,0, 0,0,0, 0,0,0],
+		[0,0,0, 0,0,0, 0,0,0]
+		]
+
+		main_sudoku.solve_sudoku(board_to_solve=fill_in_puzzle)
+		actual_result = main_sudoku.is_valid_sudoku(board_to_test=fill_in_puzzle)
+
+		expected_result = {'is_valid': True, 'invalid_row':None, 'invalid_column':None, 'invalid_digit':None}
+		self.assertEqual(actual_result, expected_result)
+		# main_sudoku.npdisplay(board=fill_in_puzzle)
+
+
 	
 
 # When run as a script, run the test cases
