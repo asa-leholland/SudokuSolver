@@ -18,6 +18,16 @@ puzzle = [
 ]
 
 
+new_puzzle = [[3, 0, 6, 5, 0, 8, 4, 0, 0],
+          [5, 2, 0, 0, 0, 0, 0, 0, 0],
+          [0, 8, 7, 0, 0, 0, 0, 3, 1],
+          [0, 0, 3, 0, 1, 0, 0, 8, 0],
+          [9, 0, 0, 8, 6, 3, 0, 0, 5],
+          [0, 5, 0, 0, 9, 0, 6, 0, 0],
+          [1, 3, 0, 0, 0, 0, 2, 5, 0],
+          [0, 0, 0, 0, 0, 0, 0, 7, 4],
+          [0, 0, 5, 2, 0, 6, 3, 0, 0]]
+
 
 solution = [
 [4,3,5, 2,6,9, 7,8,1],
@@ -38,25 +48,29 @@ class SudokuTestMethods(unittest.TestCase):
 
 	def test_valid_placement(self):
 		# Test that is_placement_possible() returns valid input for a Valid placement
-		self.assertEqual(main_sudoku.is_placement_possible(y=0, x=0, n=3, board=puzzle), True)
+		self.assertEqual(main_sudoku.is_placement_possible(y=0, x=0, n=3, board=new_puzzle), True)
 
 	def test_invalid_row_placement(self):
 		# Test that is_placement_possible() returns valid input for a non-valid placement in the same row
-		self.assertEqual(main_sudoku.is_placement_possible(y=0, x=0, n=2, board=puzzle), False)
+		self.assertEqual(main_sudoku.is_placement_possible(y=0, x=0, n=2, board=new_puzzle), False)
 
 	def test_invalid_column_placement(self):
 		# Test that is_placement_possible() returns valid input for a non-valid placement in the same column
-		self.assertEqual(main_sudoku.is_placement_possible(y=0, x=0, n=8, board=puzzle), False)
+		self.assertEqual(main_sudoku.is_placement_possible(y=0, x=0, n=8, board=new_puzzle), False)
 
 	def test_invalid_subsquare_placement(self):
 		# Test that is_placement_possible() returns valid input for a non-valid placement in the same subsquare
-		self.assertEqual(main_sudoku.is_placement_possible(y=0, x=0, n=9, board=puzzle), False)
+		self.assertEqual(main_sudoku.is_placement_possible(y=0, x=0, n=9, board=new_puzzle), False)
 
 	def test_valid_solving(self):
-		self.assertEqual(main_sudoku.solve(board_to_solve=puzzle), solution)
+		self.assertEqual(main_sudoku.solve(board_to_solve=new_puzzle), solution)
 
 
 
 if __name__ == '__main__':
 	# unittest.main()
-	print(main_sudoku.solve(board_to_solve=puzzle))
+	# print(main_sudoku.solve(board_to_solve=new_puzzle))
+	main_sudoku.npdisplay(puzzle)
+	main_sudoku.solve_sudoku(board_to_solve=puzzle)
+	main_sudoku.npdisplay(puzzle)
+	# print(puzzle)

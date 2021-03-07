@@ -1,13 +1,16 @@
-# main.py
-# Author: Asa LeHolland
+# # main.py
+# # Author: Asa LeHolland
 
 
 import numpy as np 
 
 
 
-# method to convert the provided puzzle to a numpy array, which is output as a square board
+
 def npdisplay(board):
+	"""
+	Method to convert the provided puzzle to a numpy array, which is output as a square board
+	"""
 	print(np.matrix(board)) 
 
 
@@ -56,9 +59,12 @@ def is_placement_possible(y, x, n, board):
 	# Return True, since it is possible to place the number at these coordinates
 	return True
 
-
-
-def solve(board_to_solve, solved=False):
+	
+def find_empty_location(board, coordinates):
+	"""
+	Finds an empty location on the Sudoku Board
+	:return: True if empty location is found, False if no remaining cells are found. 
+	"""
 
 	# iterate over each row (y values)
 	for y_i in range(9):
@@ -66,35 +72,55 @@ def solve(board_to_solve, solved=False):
 		# iterate over each column (x values)
 		for x_j in range(9):
 
-			# check each cell at the provided indices and see if it is 0 (or not solved yet)  
-			if board_to_solve[y_i][x_j] == 0:
+			# check each cell at the provided indices and see if it is 0 (or not solved yet)
+			if board[y_i][x_j] == 0:
 
-				# If the cell is not solved yet, attempt to solve it using each possible value
-				for val in range(1, 10):
+				# if a digit has not been placed in a cell, save the coordinates of that cell and return True 
+				# mutate the provided coordinates
+				coordinates[0]= y_i
+				coordinates[1]= x_j
+				return True
 
-					# Check if it is possible to place the value there
-					if is_placement_possible(y=y_i, x=x_j, n=val, board=board_to_solve):
+	# If there are no remaining empty cells, we return False
+	return False
+	
 
-						# If the value is possible to place, place it
-						board_to_solve[y_i][x_j] = val
+def solve_sudoku(board_to_solve):
+		
 
-						# Recursively solve the board using the placed value
-						if not solve(board_to_solve)[1]:
+	# define the current coordinates of the Sudoku cell we are examining. 
+	# Start in the upper left corner 
+	current_coords = [0, 0]
 
-							# If the above recursive step fails, we return here.
-							# In this case, the value we placed is not correct. We need to check another value.
-							# We reset the board at that position, since this placement was incorrect.
-							board_to_solve[y_i][x_j] = 0
+	# Check if all cells have been filled
+	if not find_empty_location(board=board_to_solve, coordinates=current_coords):
 
-				# If we reach here there are two possibilities
-				# 1) If we are still inside the board but have run out of options to place another number
-				# This means we made a mistake earlier in the placement
-				print('y_i', y_i, 'x_j', x_j, 'val', val)
-				return (board_to_solve, False)
+		# If so, we have solved the puzzle. Return True
+		return True
 
-	# If we reach here, we have iterated over all cells in the board
-	# We have also filled all cells in the board.
-	return (board_to_solve, True)
+	# Assign row and column values using the provided coordinates 
+	[row, col] = current_coords
+	
+	# If the cell is not solved yet, attempt to solve it using each possible digit
+	for digit in range(1, 10):
+		
+		# Check if it is possible to place the digit there
+		if is_placement_possible(y=row, x=col, n=digit, board=board_to_solve):
+			
+			# If the digit is possible to place, place it
+			board_to_solve[row][col] = digit
+			 
+			# Then, check to see if placing this final digit solves the puzzle.
+			if solve_sudoku(board_to_solve=board_to_solve):
 
+				# If so, return True stating we have found the solution
+				return True
+				
+			# Otherwise, take away the placed digit and continue the iteration
+			board_to_solve[row][col] = 0
+			
+	# If a dead end is reached (no possible digits are placeable), then it means we made a mistake earlier
+	# backtrack to the previous call 
+	return False
 
 
