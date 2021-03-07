@@ -52,7 +52,11 @@ class SudokuTestMethods(unittest.TestCase):
 		# Test that is_placement_possible() returns valid input for a non-valid placement in the same subsquare
 		self.assertEqual(main_sudoku.is_placement_possible(y=0, x=0, n=9, board=puzzle), False)
 
+	def test_valid_solving(self):
+		self.assertEqual(main_sudoku.solve(board_to_solve=puzzle), solution)
+
 
 
 if __name__ == '__main__':
-	unittest.main()
+	# unittest.main()
+	print(main_sudoku.solve(board_to_solve=puzzle))

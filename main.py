@@ -57,9 +57,44 @@ def is_placement_possible(y, x, n, board):
 	return True
 
 
-if __name__ == "__main__":
 
-	npdisplay(board=puzzle)
+def solve(board_to_solve, solved=False):
+
+	# iterate over each row (y values)
+	for y_i in range(9):
+
+		# iterate over each column (x values)
+		for x_j in range(9):
+
+			# check each cell at the provided indices and see if it is 0 (or not solved yet)  
+			if board_to_solve[y_i][x_j] == 0:
+
+				# If the cell is not solved yet, attempt to solve it using each possible value
+				for val in range(1, 10):
+
+					# Check if it is possible to place the value there
+					if is_placement_possible(y=y_i, x=x_j, n=val, board=board_to_solve):
+
+						# If the value is possible to place, place it
+						board_to_solve[y_i][x_j] = val
+
+						# Recursively solve the board using the placed value
+						if not solve(board_to_solve)[1]:
+
+							# If the above recursive step fails, we return here.
+							# In this case, the value we placed is not correct. We need to check another value.
+							# We reset the board at that position, since this placement was incorrect.
+							board_to_solve[y_i][x_j] = 0
+
+				# If we reach here there are two possibilities
+				# 1) If we are still inside the board but have run out of options to place another number
+				# This means we made a mistake earlier in the placement
+				print('y_i', y_i, 'x_j', x_j, 'val', val)
+				return (board_to_solve, False)
+
+	# If we reach here, we have iterated over all cells in the board
+	# We have also filled all cells in the board.
+	return (board_to_solve, True)
 
 
-	
+
