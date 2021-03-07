@@ -181,15 +181,18 @@ def confirm_puzzle_is_solvable(puzzle):
 	Solves and validates a 
 	"""
 	if not solve_sudoku(board_to_solve=puzzle):
-		return "This particular Sudoku puzzle cannot be solved."
+		print("This particular Sudoku puzzle cannot be solved.") 
+		return
 
 	validation = is_valid_sudoku(board_to_test=puzzle)
 
 	if validation['is_valid']:
-		return "At least one valid solution for the provided puzzle exists."
+		print("At least one valid solution for the provided puzzle exists.") 
 
 	else:
-		return "Error! The provided puzzle is possible to solve, but a valid solution was not found."
+		print("Error! The provided puzzle is possible to solve, but a valid solution was not found.")
+		 
+	return
 
 
 

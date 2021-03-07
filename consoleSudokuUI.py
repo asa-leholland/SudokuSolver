@@ -2,7 +2,7 @@
 # author: Asa Holland
 
 import random
-
+import time
 
 import main as main_sudoku
 
@@ -61,28 +61,100 @@ def welcome():
 	"""
 	Welcomes the user to Console Sudoku.
 	"""
-	print('\nWelcome to Console Sudoku!')
+	print("""
+		Welcome to Console Sudoku!""")
 
 
 def describe_sudoku():
 	print('Sudoku is')
 
+	time.sleep(3)
 
+	return True
+
+
+
+def open_puzzle(puzzle_serial_to_open):
+	print('You have opened this puzzle')
+
+	pass
 
 def load_sudoku_board(board_to_load):
-	main_sudoku.npdisplay(board_to_load)
+
+	time.sleep(1)
+
+	valid_selections = {}
+
+	# Allow user to attempt to solve the puzzle
+	option_1 = 'Attempt to solve this puzzle.'
+	valid_selections[1] = open_puzzle(puzzle_serial_to_open=board_to_load)
+
+	# Allow user to confirm the puzzle is valid
+	option_2 = 'Confirm this is a valid sudoku puzzle (confirm there is at least one possible solution).'
+	valid_selections[2] = main_sudoku.confirm_puzzle_is_solvable(puzzle=board_to_load)
+
+	# Allow user to view a solution
+	option_3 = 'Generate a valid solution to this puzzle.'
+	valid_selections[3] = load_random_sudoku
+
+	# Allow user to return to puzzle selection
+	option_4 = 'Return to the Main Menu.'
+	valid_selections[4] = load_random_sudoku
+
+
+	running = True
+
+	while running:
+
+		print(f"""
+		This is the Puzzle Selection Menu.
+		Please enter one of the following options:
+
+		1. {option_1}
+		2. {option_2}
+		3. {option_3}
+		4. {option_4}
+
+		Or enter 'Q' to quite Console Sudoku.
+		""")
+
+		user_selection = input('Enter your selection: ')
+
+		if user_selection == 'Q':
+			return False
+
+		else:
+			validated_input = get_valid_int(provided_input=user_selection)
+
+			if validated_input is None:
+				print("Error, invalid input. Please enter a number selecting one of the provided options or enter 'Q' to quit Console Sudoku.")
+
+			elif validated_input not in valid_selections:
+				print("Error, invalid selection. Please enter one of the provided options or enter 'Q' to quit Console Sudoku.")
+
+			elif validated_input == 4:
+				print("Returning to the Main Menu of Console Sudoku.")
+				time.sleep(1)
+				return True
+			else:
+				valid_selections[validated_input]()
+
 
 
 def load_random_sudoku():
 	selection = random.choice(puzzles)
 
-	selection_prompt = f"""
-	You have selected a Sudoku puzzle called '{selection['puzzle_name']}'. 
-	This source of this puzzle is {selection['source']}.
-	"""
-	print(selection_prompt)
+	selection_prompt = [
+	f"You have selected a Sudoku puzzle called '{selection['puzzle_name']}'.",
+	f"This source of this puzzle is {selection['source']}."
+	]
 
-	load_sudoku_board(board_to_load=selection['puzzle'])
+	for line in selection_prompt:
+		time.sleep(0.5)
+		print(line)
+
+	return load_sudoku_board(board_to_load=selection['puzzle'])
+
 
 
 # Modified from source: https://pynative.com/python-check-user-input-is-number-or-string
@@ -139,8 +211,9 @@ def present_options():
 	while running:
 
 		print(f"""
-
+		This is the Console Sudoku Main Menu.
 		Please enter one of the following options:
+		
 		1. {option_1}
 		2. {option_2}
 
@@ -149,10 +222,7 @@ def present_options():
 
 		user_selection = input('Enter your selection: ')
 
-		print(user_selection)
-
 		if user_selection == 'Q':
-			print('Thank you for using Console Sudoku.')
 			running = False
 
 		else:
@@ -165,21 +235,10 @@ def present_options():
 				print("Error, invalid selection. Please enter one of the provided options or enter 'Q' to quit Console Sudoku.")
 
 			else:
-				valid_selections[validated_input]()
+				running = valid_selections[validated_input]()
 
+	print('Thank you for using Console Sudoku.')
 
-
-
-def open_puzzle(puzzle_serial_to_open):
-
-	# Allow user to attempt to solve the puzzle
-
-	# Allow user to view a solution
-
-	# Allow user to quit and return to puzzle selection
-
-	# Allow user to quit Console Sudoku
-	pass
 
 
 def user_solve(puzzle_for_user_to_solve):
