@@ -3,11 +3,14 @@
 
 import random
 
+
+import main as main_sudoku
+
 puzzles = [
 
 	{
 	'puzzle_name': 'Very, Very Easy Sudoku',
-	'source:' 'Asa Holland'
+	'source': 'Asa Holland',
 	'puzzle': [	[1,2,3, 5,4,7, 6,8,9],
 				[4,5,6, 2,9,8, 1,3,7],
 				[7,8,9, 3,6,1, 2,4,5],
@@ -58,7 +61,7 @@ def welcome():
 	"""
 	Welcomes the user to Console Sudoku.
 	"""
-	print('Welcome to Console Sudoku!')
+	print('\nWelcome to Console Sudoku!')
 
 
 def describe_sudoku():
@@ -67,7 +70,7 @@ def describe_sudoku():
 
 
 def load_sudoku_board(board_to_load):
-	print(board_to_load)
+	main_sudoku.npdisplay(board_to_load)
 
 
 def load_random_sudoku():
@@ -149,18 +152,20 @@ def present_options():
 		print(user_selection)
 
 		if user_selection == 'Q':
+			print('Thank you for using Console Sudoku.')
 			running = False
 
-		validated_input = get_valid_int(provided_input=user_selection)
-
-		if validated_input is None:
-			print("Error, invalid input. Please enter a number selecting one of the provided options or enter 'Q' to quit Console Sudoku.")
-
-		elif validated_input not in valid_selections:
-			print("Error, invalid selection. Please enter one of the provided options or enter 'Q' to quit Console Sudoku.")
-
 		else:
-			valid_selections[validated_input]()
+			validated_input = get_valid_int(provided_input=user_selection)
+
+			if validated_input is None:
+				print("Error, invalid input. Please enter a number selecting one of the provided options or enter 'Q' to quit Console Sudoku.")
+
+			elif validated_input not in valid_selections:
+				print("Error, invalid selection. Please enter one of the provided options or enter 'Q' to quit Console Sudoku.")
+
+			else:
+				valid_selections[validated_input]()
 
 
 
