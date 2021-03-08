@@ -242,7 +242,7 @@ def validate_user_submission(user_board):
 
 	else:
 		return ["The provided submission is not valid.", 
-			f"The digit in Row {validation['invalid_row']}, Column {validation['invalid_row']} cannot be {validation['invalid_digit']}."]
+			f"The digit in Row {validation['invalid_row']}, Column {validation['invalid_column']} cannot be {validation['invalid_digit']}."]
 
 
 

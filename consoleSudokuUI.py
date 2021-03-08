@@ -8,56 +8,9 @@ import re
 
 import main as main_sudoku
 
-puzzles = [
 
-	{
-	'puzzle_name': 'Very, Very Easy Sudoku',
-	'source': 'Asa Holland',
-	'puzzle': [	[1,2,3, 5,4,7, 6,8,9],
-				[4,5,6, 2,9,8, 1,3,7],
-				[7,8,9, 3,6,1, 2,4,5],
+import json
 
-				[5,4,7, 1,2,3, 8,9,6],
-				[2,9,8, 0,5,6, 3,7,1],
-				[3,6,1, 7,8,9, 4,5,2],
-
-				[6,1,4, 8,7,5, 9,2,3],
-				[8,3,5, 9,1,2, 7,6,4],
-				[9,7,2, 6,3,4, 5,1,8]	]	
-	}, 
-
-	# {
-	# 'puzzle_name': 'Easy Sudoku',
-	# 'source': 'https://dingo.sbs.arizona.edu/~sandiway/sudoku/examples.html',
-	# 'puzzle': [	[0,0,0, 2,6,0, 7,0,1],
-	# 			[6,8,0, 0,7,0, 0,9,0],
-	# 			[1,9,0, 0,0,4, 5,0,0],
-
-	# 			[8,2,0, 1,0,0, 0,4,0],
-	# 			[0,0,4, 6,0,2, 9,0,0],
-	# 			[0,5,0, 0,0,3, 0,2,8],
-
-	# 			[0,0,9, 3,0,0, 0,7,4],
-	# 			[0,4,0, 0,5,0, 0,3,6],
-	# 			[7,0,3, 0,1,8, 0,0,0]	]
-	# }, 
-
-	# {
-	# 'puzzle_name': 'Impossible Sudoku',
-	# 'source': 'https://www.sudokudragon.com/unsolvable.htm',
-	# 'puzzle': [	[0,0,0, 2,6,0, 7,0,1],
-	# 			[6,8,0, 0,7,0, 0,9,0],
-	# 			[1,9,0, 0,0,4, 5,0,0],
-
-	# 			[8,2,0, 1,0,0, 0,4,0],
-	# 			[0,0,4, 6,0,2, 9,0,0],
-	# 			[0,5,0, 0,0,3, 0,2,8],
-
-	# 			[0,0,9, 3,0,0, 0,7,4],
-	# 			[0,4,0, 0,5,0, 0,3,6],
-	# 			[7,0,3, 0,1,8, 0,0,0]	]
-	# }, 
-]
 
 def welcome():
 	"""
@@ -75,47 +28,21 @@ def describe_sudoku():
 	return True
 
 
-def confirm_solvable(board):
-	print('\nChecking to see if the provided puzzle has a solution...')
-	time.sleep(2)
-	board_copy = board.copy()
-	main_sudoku.confirm_puzzle_is_solvable(board_copy)
-	time.sleep(1)
-	return True
-
-
 def generate_solution(board):
 	print('\nChecking for a solution...')
 	time.sleep(2)
 	board_copy = list(board)
 	if main_sudoku.solve_sudoku(board_to_solve=board_copy):
 
-		print('\nOne valid solution to this Sudoku puzzle is as follows:')
+		print('\nOne valid solution to this Sudoku puzzle is as follows:\n')
 		main_sudoku.npdisplay(board_copy)
 	else:
-		print('There is no valid solution for this puzzle.')
+		print('\nThere is no valid solution for this puzzle.')
 	time.sleep(1)
-	return True
-
-def user_place(current_board, blank_board):
-	"""
-	Allows a user to place a new number on the current version of the currently opened Sudoku board
-	:param current_board: The current 9x9 array of the user's submission
-	:param blank_board: The original 9x9 array for the user's puzzle, prior to any edits (not utilized by this function)
-	"""
+	
 
 
-
-def user_submit(current_board, blank_board):
-	"""
-	Allows a user to submit the current version of the currently opened Sudoku board
-	:param current_board: The current 9x9 array of the user's submission
-	:param blank_board: The original 9x9 array for the user's puzzle, prior to any edits (not utilized by this function)
-	"""
-
-
-
-def user_solve(puzzle_for_user_to_solve):
+def user_solve(puzzle_for_user_to_solve, backup):
 
 	time.sleep(1)
 
@@ -162,20 +89,21 @@ def user_solve(puzzle_for_user_to_solve):
 				is_valid_input = bool(re.match(r"^[0-8], [0-8], [1-9]$", user_input))
 				if not is_valid_input:
 					print("""Invalid entry. To enter 2 in Row 3, Column 4, enter '2, 3, 4'.""")
-					return False
 
-				# Parse the user provided input
-				[user_row, user_column, user_value] = [int(digit) for digit in user_input.split(', ')]
+				else:
 
-				# Check if the user input would change an original cell
-				if user_board[user_row][user_column] != 0:
-					print("""Invalid placement. You can't change cells from the original provided puzzle.""")
-					return False
+					# Parse the user provided input
+					[user_row, user_column, user_value] = [int(digit) for digit in user_input.split(', ')]
 
-				user_board[user_row][user_column] = user_value
-				print(f"""Valid placement. You have placed a {user_value} in Row {user_row}, Column {user_column}.""")
+					# Check if the user input would change an original cell
+					if user_board[user_row][user_column] != 0:
+						print("""Invalid placement. You can't change cells from the original provided puzzle.""")
+
+					else:
+						user_board[user_row][user_column] = user_value
+						print(f"""Valid placement. You have placed a {user_value} in Row {user_row}, Column {user_column}.""")
+				
 				main_sudoku.npdisplay(user_board)
-				return True
 			
 			# Allow the user to submit a solution
 			elif validated_input == 2:
@@ -188,11 +116,13 @@ def user_solve(puzzle_for_user_to_solve):
 					time.sleep(0.5)
 					print(line)
 
+				main_sudoku.npdisplay(user_board)
+
 			# Allow the user to reset the board
 			elif validated_input == 3:
 				print("You have reset this Sudoku board.")
 				time.sleep(1)
-				user_board = list(puzzle_for_user_to_solve)
+				user_board = list(backup)
 				main_sudoku.npdisplay(user_board)
 
 			# Allow the user to quit, returning them to puzzle selection
@@ -200,8 +130,6 @@ def user_solve(puzzle_for_user_to_solve):
 				print("Returning to the Puzzle Selection Menu for this puzzle.")
 				time.sleep(1)
 				return True
-			else:
-				valid_selections[validated_input](current_board=user_board, blank_board=puzzle_for_user_to_solve)
 
 
 	
@@ -211,26 +139,27 @@ def load_sudoku_board(board_to_load):
 	time.sleep(1)
 
 	copy_of_board_to_load = list(board_to_load)
+	second_copy = list(board_to_load)
 
 	main_sudoku.npdisplay(copy_of_board_to_load)
 
 	valid_selections = {}
 
-	# Allow user to attempt to solve the puzzle
-	option_1 = 'Attempt to solve this puzzle.'
+	
+	option_1 = '.'
 	valid_selections[1] = user_solve
 
-	# Allow user to confirm the puzzle is valid
-	option_2 = 'Confirm this is a valid sudoku puzzle (confirm there is at least one possible solution).'
-	valid_selections[2] = confirm_solvable
+	# # Allow user to confirm the puzzle is valid
+	# option_2 = 'Confirm this is a valid sudoku puzzle (confirm there is at least one possible solution).'
+	# valid_selections[2] = confirm_solvable
 
-	# Allow user to view a solution
-	option_3 = 'Generate a valid solution to this puzzle.'
-	valid_selections[3] = generate_solution
+	
+	option_2 = ''
+	valid_selections[2] = generate_solution
 
-	# Allow user to return to puzzle selection
-	option_4 = 'Return to the Main Menu.'
-	valid_selections[4] = None
+	
+	option_3 = ''
+	valid_selections[3] = None
 
 
 	running = True
@@ -241,10 +170,9 @@ def load_sudoku_board(board_to_load):
 		This is the Puzzle Selection Menu.
 		Please enter one of the following options:
 
-		1. {option_1}
-		2. {option_2}
-		3. {option_3}
-		4. {option_4}
+		1. Attempt to solve this puzzle.
+		2. Generate and view a valid solution to this puzzle.
+		3. Return to the Main Menu.
 
 		Or enter 'Q' to quit Console Sudoku.
 		""")
@@ -260,24 +188,41 @@ def load_sudoku_board(board_to_load):
 			if validated_input is None:
 				print("Error, invalid input. Please enter a number selecting one of the provided options or enter 'Q' to quit Console Sudoku.")
 
+			
 			elif validated_input not in valid_selections:
 				print("Error, invalid selection. Please enter one of the provided options or enter 'Q' to quit Console Sudoku.")
 
-			elif validated_input == 4:
+			# Allow user to attempt to solve the puzzle
+			elif validated_input == 1:
+				user_solve(puzzle_for_user_to_solve=copy_of_board_to_load, backup=second_copy)
+			
+			# Allow user to view a solution
+			elif validated_input == 2:
+				duplicate = list(board_to_load)
+				generate_solution(board=duplicate)
+
+			# Allow user to return to puzzle selection
+			elif validated_input == 3:
 				print("Returning to the Main Menu of Console Sudoku.")
 				time.sleep(1)
 				return True
 			else:
-				valid_selections[validated_input](copy_of_board_to_load)
+				running = valid_selections[validated_input](copy_of_board_to_load)
 
 
 
 def load_random_sudoku():
-	selection = random.choice(puzzles)
+
+	with open(f"puzzles.json") as json_file:
+		data = json.load(json_file)
+		random_puzzle = random.choice(data)
+
+	name = random_puzzle["puzzle_name"]
+	source = random_puzzle["source"]
 
 	selection_prompt = [
-	f"You have selected a Sudoku puzzle called '{selection['puzzle_name']}'.",
-	f"This source of this puzzle is {selection['source']}."
+	f"You have selected a Sudoku puzzle called '{name}'.",
+	f"This source of this puzzle is {source}."
 	]
 
 	for line in selection_prompt:
@@ -285,7 +230,7 @@ def load_random_sudoku():
 		print(line)
 
 
-	copy_of_selection = list(selection['puzzle'])
+	copy_of_selection = list(random_puzzle["puzzle"])
 
 
 	return load_sudoku_board(board_to_load=copy_of_selection)
@@ -294,17 +239,17 @@ def load_random_sudoku():
 
 # Modified from source: https://pynative.com/python-check-user-input-is-number-or-string
 def get_valid_int(provided_input):
-    try:
-        # Convert it into integer
-        val = int(provided_input)
-        return val
-    except ValueError:
-        try:
-            # Convert it into float
-            val = float(provided_input)
-            return val
-        except ValueError:
-            return None
+	try:
+		# Convert it into integer
+		val = int(provided_input)
+		return val
+	except ValueError:
+		try:
+			# Convert it into float
+			val = float(provided_input)
+			return val
+		except ValueError:
+			return None
 
 
 def present_options():
