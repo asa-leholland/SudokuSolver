@@ -72,7 +72,14 @@ def describe_sudoku():
 
 	return True
 
-
+def generate_solution(board):
+	print('\nChecking for a solution...')
+	time.sleep(2)
+	if main_sudoku.solve_sudoku(board_to_solve=board):
+		main_sudoku.npdisplay(board)
+	else:
+		print('There is no valid solution for this puzzle.')
+	return True
 
 def open_puzzle(puzzle_serial_to_open):
 	print('You have opened this puzzle')
@@ -87,15 +94,15 @@ def load_sudoku_board(board_to_load):
 
 	# Allow user to attempt to solve the puzzle
 	option_1 = 'Attempt to solve this puzzle.'
-	valid_selections[1] = open_puzzle(puzzle_serial_to_open=board_to_load)
+	valid_selections[1] = open_puzzle
 
 	# Allow user to confirm the puzzle is valid
 	option_2 = 'Confirm this is a valid sudoku puzzle (confirm there is at least one possible solution).'
-	valid_selections[2] = main_sudoku.confirm_puzzle_is_solvable(puzzle=board_to_load)
+	valid_selections[2] = main_sudoku.confirm_puzzle_is_solvable
 
 	# Allow user to view a solution
 	option_3 = 'Generate a valid solution to this puzzle.'
-	valid_selections[3] = load_random_sudoku
+	valid_selections[3] = generate_solution
 
 	# Allow user to return to puzzle selection
 	option_4 = 'Return to the Main Menu.'
@@ -137,7 +144,7 @@ def load_sudoku_board(board_to_load):
 				time.sleep(1)
 				return True
 			else:
-				valid_selections[validated_input]()
+				valid_selections[validated_input](board_to_load)
 
 
 
