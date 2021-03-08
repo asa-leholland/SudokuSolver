@@ -87,7 +87,7 @@ def confirm_solvable(board):
 def generate_solution(board):
 	print('\nChecking for a solution...')
 	time.sleep(2)
-	board_copy = board.copy()
+	board_copy = list(map(list, zip(*board)))
 	if main_sudoku.solve_sudoku(board_to_solve=board_copy):
 
 		print('\nOne valid solution to this Sudoku puzzle is as follows:')
@@ -142,26 +142,11 @@ def user_submit(current_board, blank_board):
 		print(line)
 
 
-def user_clear(current_board, blank_board):
-	"""
-	Allows a user to reset/clear the current version of the currently opened Sudoku board
-	:param current_board: The current 9x9 array of the user's submission
-	:param blank_board: The original 9x9 array for the user's puzzle, prior to any edits
-	"""
-	print("You have reset this Sudoku board.")
-	time.sleep(1)
-	current_board = blank_board
-	main_sudoku.npdisplay(current_board)
-
-
-
-
-
 def user_solve(puzzle_for_user_to_solve):
 
 	time.sleep(1)
 
-	user_board = puzzle_for_user_to_solve.copy()
+	user_board = list(map(list, zip(*puzzle_for_user_to_solve)))
 
 	main_sudoku.npdisplay(user_board)
 
@@ -177,7 +162,7 @@ def user_solve(puzzle_for_user_to_solve):
 
 	# Allow the user to reset the board
 	option_3 = 'Reset this Sudoku board. Warning: All progress will be lost!'
-	valid_selections[3] = user_clear
+	valid_selections[3] = None
 
 	# Allow the user to quit, returning them to puzzle selection
 	option_4 = 'Close this Sudoku board, and return to the Puzzle Selection Menu for this puzzle.'
@@ -213,6 +198,12 @@ def user_solve(puzzle_for_user_to_solve):
 			elif validated_input not in valid_selections:
 				print("Error, invalid selection. Please enter one of the provided options or enter 'Q' to quit Console Sudoku.")
 
+			elif validated_input == 3:
+				print("You have reset this Sudoku board.")
+				time.sleep(1)
+				user_board = list(map(list, zip(*puzzle_for_user_to_solve)))
+				main_sudoku.npdisplay(user_board)
+
 			elif validated_input == 4:
 				print("Returning to the Puzzle Selection Menu for this puzzle.")
 				time.sleep(1)
@@ -227,7 +218,9 @@ def load_sudoku_board(board_to_load):
 
 	time.sleep(1)
 
-	main_sudoku.npdisplay(board_to_load)
+	copy_of_board_to_load = board_to_load.copy()
+
+	main_sudoku.npdisplay(copy_of_board_to_load)
 
 	valid_selections = {}
 
@@ -283,7 +276,7 @@ def load_sudoku_board(board_to_load):
 				time.sleep(1)
 				return True
 			else:
-				valid_selections[validated_input](board_to_load)
+				valid_selections[validated_input](copy_of_board_to_load)
 
 
 
@@ -299,7 +292,11 @@ def load_random_sudoku():
 		time.sleep(0.5)
 		print(line)
 
-	return load_sudoku_board(board_to_load=selection['puzzle'])
+
+	copy_of_selection = selection['puzzle'].copy()
+
+
+	return load_sudoku_board(board_to_load=copy_of_selection)
 
 
 

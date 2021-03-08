@@ -26,17 +26,19 @@ def is_placement_possible(y, x, n, board):
 	:param board: the current sudoku board for which to test on
 	"""
 
+	copied_board=board.copy()
+
 	# Iterate over all possible indices for the rows  
 	for i in range(0, 9):
 
 		# First check each cell in the provided row to see if the provided number is already present
-		if board[y][i] == n:
+		if copied_board[y][i] == n:
 
 			# If the provided number is found in the row, then it is not possible to place
 			return False
 
 		# Then check each cell in the provided column to see if the provided number is already present 
-		if board[i][x] == n:
+		if copied_board[i][x] == n:
 
 			# If the provided number is found in the column, then it is not possible to place
 			return False
@@ -50,7 +52,7 @@ def is_placement_possible(y, x, n, board):
 	# This is done by adding 0, 1 or 2 to the first index of both the vertical and horizontal coordinates of that subsquare  
 	for i in range(3):
 		for j in range(3):
-			if board[subsquare_y+i][subsquare_x+j] == n:
+			if copied_board[subsquare_y+i][subsquare_x+j] == n:
 
 				# If a cell within the subsquare contains the provided number, then it is not possible to place
 				return False
@@ -68,6 +70,8 @@ def find_empty_location(board, coordinates):
 	:return: True if empty location is found, False if no remaining cells are found. 
 	"""
 
+	copied_board = board.copy()
+
 	# iterate over each row (y values)
 	for y_i in range(9):
 
@@ -75,7 +79,7 @@ def find_empty_location(board, coordinates):
 		for x_j in range(9):
 
 			# check each cell at the provided indices and see if it is 0 (or not solved yet)
-			if board[y_i][x_j] == 0:
+			if copied_board[y_i][x_j] == 0:
 
 				# if a digit has not been placed in a cell, save the coordinates of that cell and return True 
 				# mutate the provided coordinates
@@ -93,13 +97,15 @@ def solve_sudoku(board_to_solve):
 	:param board_to_solve: a 9x9 array of arrays representing a Sudoku puzzle board
 	:return: True if a valid solution is found or False if no valid solution was found
 	"""
+
+	copied_board = board_to_solve.copy()
 		
 	# define the current coordinates of the Sudoku cell we are examining. 
 	# Start in the upper left corner 
 	current_coords = [0, 0]
 
 	# Check if all cells have been filled
-	if not find_empty_location(board=board_to_solve, coordinates=current_coords):
+	if not find_empty_location(board=copied_board, coordinates=current_coords):
 
 		# If so, we have solved the puzzle. Return True
 		return True
@@ -111,19 +117,19 @@ def solve_sudoku(board_to_solve):
 	for digit in range(1, 10):
 		
 		# Check if it is possible to place the digit there
-		if is_placement_possible(y=row, x=col, n=digit, board=board_to_solve):
+		if is_placement_possible(y=row, x=col, n=digit, board=copied_board):
 			
 			# If the digit is possible to place, place it
-			board_to_solve[row][col] = digit
+			copied_board[row][col] = digit
 			 
 			# Then, check to see if placing this final digit solves the puzzle.
-			if solve_sudoku(board_to_solve=board_to_solve):
+			if solve_sudoku(board_to_solve=copied_board):
 
 				# If so, return True stating we have found the solution
 				return True
 				
 			# Otherwise, take away the placed digit and continue the iteration
-			board_to_solve[row][col] = 0
+			copied_board[row][col] = 0
 			
 	# If a dead end is reached (no possible digits are placeable), then it means 
 	# that we we made a mistake earlier in our placements 
@@ -144,7 +150,7 @@ def is_valid_sudoku(board_to_test):
 	"""
 
 	# save a duplicate of the test board, that way we can check the validity without modifying the 
-	temp_board = board_to_test.copy() 
+	temp_board = list(map(list, zip(*board_to_test)))
 
 	# iterate over rows (y values)
 	for row in range(9):
@@ -181,10 +187,14 @@ def confirm_puzzle_is_solvable(puzzle):
 	"""
 	Solves and validates a 
 	"""
-	temp_board = puzzle.copy()
 
-	if not solve_sudoku(board_to_solve=temp_board):
-		print("This particular Sudoku puzzle cannot be solved.") 
+	# To test the puzzle's capacity to be solvable, we need to make a copy of the provided puzzle board.
+	# Since it is a list of lists, we need to zip together all sublists into a dictionary, then seprate them back out using the map(list) function.
+	# We finally turn the result into a list to ensure that this remains a copy instead of referencing the same original puzzle 
+	temp_board = list(map(list, zip(*puzzle)))
+
+	if not solve_sudoku(board_to_solve=list(temp_board)):
+		print("This particular Sudoku puzzle cannot be solved.")
 		return
 
 	validation = is_valid_sudoku(board_to_test=temp_board)
