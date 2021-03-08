@@ -16,15 +16,22 @@ def npdisplay(board):
 	# 0 1 2 3 4 5 6 7 8 9 	(purple first char, then white background with black text)
 	print()
 
-	column_header = '     | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8'
+	column_header = '                           Columns             '
 	print(column_header)
-	spacer = '     |   |   |   |   |   |   |   |   |  '
+	column_header = '            | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8'
+	print(column_header)
+	spacer = '            |   |   |   |   |   |   |   |   |  '
 	print(spacer)
 
-	row_separator = '-----|---|---|---|---|---|---|---|---|---'
+	row_separator = '       -----|---|---|---|---|---|---|---|---|---'
 	print(row_separator)
 
 	for index, row in enumerate(board):
+		if index == 4:
+			print(' Rows  ', end='')
+		else:
+			print('       ', end='')
+
 		print(f' {str(index)}   ', end='|')
 		for digit in row:
 			if digit == 0:
