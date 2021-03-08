@@ -18,7 +18,7 @@ puzzles = [
 				[7,8,9, 3,6,1, 2,4,5],
 
 				[5,4,7, 1,2,3, 8,9,6],
-				[2,9,8, 4,0,6, 3,7,1],
+				[2,9,8, 0,5,6, 3,7,1],
 				[3,6,1, 7,8,9, 4,5,2],
 
 				[6,1,4, 8,7,5, 9,2,3],
@@ -28,7 +28,7 @@ puzzles = [
 
 	# {
 	# 'puzzle_name': 'Easy Sudoku',
-	# 'source:' 'https://dingo.sbs.arizona.edu/~sandiway/sudoku/examples.html'
+	# 'source': 'https://dingo.sbs.arizona.edu/~sandiway/sudoku/examples.html',
 	# 'puzzle': [	[0,0,0, 2,6,0, 7,0,1],
 	# 			[6,8,0, 0,7,0, 0,9,0],
 	# 			[1,9,0, 0,0,4, 5,0,0],
@@ -44,7 +44,7 @@ puzzles = [
 
 	# {
 	# 'puzzle_name': 'Impossible Sudoku',
-	# 'source:' 'https://www.sudokudragon.com/unsolvable.htm'
+	# 'source': 'https://www.sudokudragon.com/unsolvable.htm',
 	# 'puzzle': [	[0,0,0, 2,6,0, 7,0,1],
 	# 			[6,8,0, 0,7,0, 0,9,0],
 	# 			[1,9,0, 0,0,4, 5,0,0],
@@ -87,7 +87,7 @@ def confirm_solvable(board):
 def generate_solution(board):
 	print('\nChecking for a solution...')
 	time.sleep(2)
-	board_copy = list(map(list, zip(*board)))
+	board_copy = list(board)
 	if main_sudoku.solve_sudoku(board_to_solve=board_copy):
 
 		print('\nOne valid solution to this Sudoku puzzle is as follows:')
@@ -134,7 +134,7 @@ def user_submit(current_board, blank_board):
 	"""
 	print("You have submitted the current board. Checking if the current board is a valid solution...")
 	time.sleep(1)
-	copied_board = current_board.copy()
+	copied_board = list(current_board)
 	submission_result = main_sudoku.validate_user_submission(user_board=copied_board)
 
 	for line in submission_result:
@@ -146,7 +146,7 @@ def user_solve(puzzle_for_user_to_solve):
 
 	time.sleep(1)
 
-	user_board = list(map(list, zip(*puzzle_for_user_to_solve)))
+	user_board = list(puzzle_for_user_to_solve)
 
 	main_sudoku.npdisplay(user_board)
 
@@ -201,7 +201,7 @@ def user_solve(puzzle_for_user_to_solve):
 			elif validated_input == 3:
 				print("You have reset this Sudoku board.")
 				time.sleep(1)
-				user_board = list(map(list, zip(*puzzle_for_user_to_solve)))
+				user_board = list(puzzle_for_user_to_solve)
 				main_sudoku.npdisplay(user_board)
 
 			elif validated_input == 4:
@@ -218,7 +218,7 @@ def load_sudoku_board(board_to_load):
 
 	time.sleep(1)
 
-	copy_of_board_to_load = board_to_load.copy()
+	copy_of_board_to_load = list(board_to_load)
 
 	main_sudoku.npdisplay(copy_of_board_to_load)
 
@@ -293,7 +293,7 @@ def load_random_sudoku():
 		print(line)
 
 
-	copy_of_selection = selection['puzzle'].copy()
+	copy_of_selection = list(selection['puzzle'])
 
 
 	return load_sudoku_board(board_to_load=copy_of_selection)

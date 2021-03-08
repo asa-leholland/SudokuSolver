@@ -4,14 +4,34 @@
 # import numpy to handle array board
 import numpy as np 
 
-
+# from termcolor import colored, cprint
 
 
 def npdisplay(board):
 	"""
 	Function to convert the provided puzzle to a numpy array, which is output as a square board
 	"""
-	print(np.array(board)) 
+
+	#   0 1 2 3 4 5 6 7 8	(purple)
+	# 0 1 2 3 4 5 6 7 8 9 	(purple first char, then white background with black text)
+	print()
+
+	column_header = '     | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8'
+	print(column_header)
+	spacer = '     |   |   |   |   |   |   |   |   |  '
+	print(spacer)
+
+	row_separator = '-----|---|---|---|---|---|---|---|---|---'
+	print(row_separator)
+
+	for index, row in enumerate(board):
+		print(f' {str(index)}   ', end='|')
+		for digit in row:
+			if digit == 0:
+				print('  ', end=' |')
+			else:
+				print(' ' + str(digit) + ' ', end='|')
+		print('\n' + row_separator)
 
 
 
@@ -150,7 +170,7 @@ def is_valid_sudoku(board_to_test):
 	"""
 
 	# save a duplicate of the test board, that way we can check the validity without modifying the 
-	temp_board = list(map(list, zip(*board_to_test)))
+	temp_board = list(board_to_test)
 
 	# iterate over rows (y values)
 	for row in range(9):
@@ -191,7 +211,7 @@ def confirm_puzzle_is_solvable(puzzle):
 	# To test the puzzle's capacity to be solvable, we need to make a copy of the provided puzzle board.
 	# Since it is a list of lists, we need to zip together all sublists into a dictionary, then seprate them back out using the map(list) function.
 	# We finally turn the result into a list to ensure that this remains a copy instead of referencing the same original puzzle 
-	temp_board = list(map(list, zip(*puzzle)))
+	temp_board = list(puzzle)
 
 	if not solve_sudoku(board_to_solve=list(temp_board)):
 		print("This particular Sudoku puzzle cannot be solved.")
