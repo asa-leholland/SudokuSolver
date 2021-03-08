@@ -46,19 +46,17 @@ def is_placement_possible(y, x, n, board):
 	:param board: the current sudoku board for which to test on
 	"""
 
-	copied_board=board.copy()
-
 	# Iterate over all possible indices for the rows  
 	for i in range(0, 9):
 
 		# First check each cell in the provided row to see if the provided number is already present
-		if copied_board[y][i] == n:
+		if board[y][i] == n:
 
 			# If the provided number is found in the row, then it is not possible to place
 			return False
 
 		# Then check each cell in the provided column to see if the provided number is already present 
-		if copied_board[i][x] == n:
+		if board[i][x] == n:
 
 			# If the provided number is found in the column, then it is not possible to place
 			return False
@@ -72,7 +70,7 @@ def is_placement_possible(y, x, n, board):
 	# This is done by adding 0, 1 or 2 to the first index of both the vertical and horizontal coordinates of that subsquare  
 	for i in range(3):
 		for j in range(3):
-			if copied_board[subsquare_y+i][subsquare_x+j] == n:
+			if board[subsquare_y+i][subsquare_x+j] == n:
 
 				# If a cell within the subsquare contains the provided number, then it is not possible to place
 				return False
@@ -90,8 +88,6 @@ def find_empty_location(board, coordinates):
 	:return: True if empty location is found, False if no remaining cells are found. 
 	"""
 
-	copied_board = board.copy()
-
 	# iterate over each row (y values)
 	for y_i in range(9):
 
@@ -99,7 +95,7 @@ def find_empty_location(board, coordinates):
 		for x_j in range(9):
 
 			# check each cell at the provided indices and see if it is 0 (or not solved yet)
-			if copied_board[y_i][x_j] == 0:
+			if board[y_i][x_j] == 0:
 
 				# if a digit has not been placed in a cell, save the coordinates of that cell and return True 
 				# mutate the provided coordinates
@@ -169,33 +165,30 @@ def is_valid_sudoku(board_to_test):
 		'invalid_digit': the invalid digit placed at the invalid row and column
 	"""
 
-	# save a duplicate of the test board, that way we can check the validity without modifying the 
-	temp_board = list(board_to_test)
-
 	# iterate over rows (y values)
 	for row in range(9):
 		# iterate over columns (x values)
 		for col in range(9):
 
 			# First, check that the cell at the current row and column is not empty
-			if temp_board[row][col] == 0:
+			if board_to_test[row][col] == 0:
 
 				# If the cell is not filled, then the provided board is not complete. Therefore it is not valid.
 				return {'is_valid': False, 'invalid_row': row, 'invalid_column': col, 'invalid_digit': 0}
 
 			# Then, check the value of the cell.
 			# Remove the value of the cell and store it as a temp variable.
-			temp = temp_board[row][col]
-			temp_board[row][col] = 0
+			temp = board_to_test[row][col]
+			board_to_test[row][col] = 0
 
 			# Then attempt to put the same value back in the board
-			if not is_placement_possible(y=row, x=col, n=temp, board=temp_board):
+			if not is_placement_possible(y=row, x=col, n=temp, board=board_to_test):
 
 				# If it is not possible to place this value in the board, then the provided board is not valid
 				return {'is_valid': False, 'invalid_row': row, 'invalid_column': col, 'invalid_digit': temp}
 
 			# If it was valid, replace the number and continue searching
-			temp_board[row][col] = temp
+			board_to_test[row][col] = temp
 
 	# If all cells are valid, then we can return True.
 	# Return an empty coordinate set 
