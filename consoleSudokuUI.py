@@ -4,6 +4,8 @@
 import random
 import time
 
+import re
+
 import main as main_sudoku
 
 puzzles = [
@@ -76,7 +78,8 @@ def describe_sudoku():
 def confirm_solvable(board):
 	print('\nChecking to see if the provided puzzle has a solution...')
 	time.sleep(2)
-	main_sudoku.confirm_puzzle_is_solvable(board)
+	board_copy = board.copy()
+	main_sudoku.confirm_puzzle_is_solvable(board_copy)
 	time.sleep(1)
 	return True
 
@@ -84,19 +87,141 @@ def confirm_solvable(board):
 def generate_solution(board):
 	print('\nChecking for a solution...')
 	time.sleep(2)
-	if main_sudoku.solve_sudoku(board_to_solve=board):
+	board_copy = board.copy()
+	if main_sudoku.solve_sudoku(board_to_solve=board_copy):
 
 		print('\nOne valid solution to this Sudoku puzzle is as follows:')
-		main_sudoku.npdisplay(board)
+		main_sudoku.npdisplay(board_copy)
 	else:
 		print('There is no valid solution for this puzzle.')
 	time.sleep(1)
 	return True
 
-def open_puzzle(puzzle_serial_to_open):
-	print('You have opened this puzzle')
+def user_place(current_board, blank_board):
+	"""
+	Allows a user to place a new number on the current version of the currently opened Sudoku board
+	:param current_board: The current 9x9 array of the user's submission
+	:param blank_board: The original 9x9 array for the user's puzzle, prior to any edits (not utilized by this function)
+	"""
+	user_input = input("Please enter the Row, Column, Value you would like to place: ")
+	time.sleep(1)
 
-	pass
+	# Check if the user input is valid
+	is_valid_input = bool(re.match(r"^[0-8], [0-8], [1-9]$", user_input))
+	if not is_valid_input:
+		print("""Invalid entry. To enter 2 in Row 3, Column 4, enter '2, 3, 4'.""")
+		return False
+
+	# Parse the user provided input
+	[user_row, user_column, user_value] = [int(digit) for digit in user_input.split(', ')]
+
+	# Check if the user input would change an original cell
+	if blank_board[user_row][user_column] != 0:
+		print("""Invalid placement. You can't change cells from the original provided puzzle.""")
+		return False
+
+	current_board[user_row][user_column] = user_value
+	print(f"""Valid placement. You have placed a {user_value} in Row {user_row}, Column {user_column}.""")
+	main_sudoku.npdisplay(current_board)
+	return True
+
+
+def user_submit(current_board, blank_board):
+	"""
+	Allows a user to submit the current version of the currently opened Sudoku board
+	:param current_board: The current 9x9 array of the user's submission
+	:param blank_board: The original 9x9 array for the user's puzzle, prior to any edits (not utilized by this function)
+	"""
+	print("You have submitted the current board. Checking if the current board is a valid solution...")
+	time.sleep(1)
+	copied_board = current_board.copy()
+	submission_result = main_sudoku.validate_user_submission(user_board=copied_board)
+
+	for line in submission_result:
+		time.sleep(0.5)
+		print(line)
+
+
+def user_clear(current_board, blank_board):
+	"""
+	Allows a user to reset/clear the current version of the currently opened Sudoku board
+	:param current_board: The current 9x9 array of the user's submission
+	:param blank_board: The original 9x9 array for the user's puzzle, prior to any edits
+	"""
+	print("You have reset this Sudoku board.")
+	time.sleep(1)
+	current_board = blank_board
+	main_sudoku.npdisplay(current_board)
+
+
+
+
+
+def user_solve(puzzle_for_user_to_solve):
+
+	time.sleep(1)
+
+	user_board = puzzle_for_user_to_solve.copy()
+
+	main_sudoku.npdisplay(user_board)
+
+	valid_selections = {}	
+
+	# Allow the user to set the number in a cell
+	option_1 = 'Place a number in an empty cell of this Sudoku board.'
+	valid_selections[1] = user_place
+
+	# Allow the user to submit a solution
+	option_2 = 'Submit the Sudoku board and see if you have solved this puzzle.'
+	valid_selections[2] = user_submit
+
+	# Allow the user to reset the board
+	option_3 = 'Reset this Sudoku board. Warning: All progress will be lost!'
+	valid_selections[3] = user_clear
+
+	# Allow the user to quit, returning them to puzzle selection
+	option_4 = 'Close this Sudoku board, and return to the Puzzle Selection Menu for this puzzle.'
+	valid_selections[4] = None
+
+	running = True
+
+	while running:
+
+		print(f"""
+		You are currently solving this puzzle.
+		Please enter one of the following options:
+
+		1. {option_1}
+		2. {option_2}
+		3. {option_3}
+		4. {option_4}
+
+		Or enter 'Q' to quit Console Sudoku.
+		""")
+
+		user_selection = input('Enter your selection: ')
+
+		if user_selection == 'Q':
+			return False
+
+		else:
+			validated_input = get_valid_int(provided_input=user_selection)
+
+			if validated_input is None:
+				print("Error, invalid input. Please enter a number selecting one of the provided options or enter 'Q' to quit Console Sudoku.")
+
+			elif validated_input not in valid_selections:
+				print("Error, invalid selection. Please enter one of the provided options or enter 'Q' to quit Console Sudoku.")
+
+			elif validated_input == 4:
+				print("Returning to the Puzzle Selection Menu for this puzzle.")
+				time.sleep(1)
+				return True
+			else:
+				valid_selections[validated_input](current_board=user_board, blank_board=puzzle_for_user_to_solve)
+
+
+	
 
 def load_sudoku_board(board_to_load):
 
@@ -108,7 +233,7 @@ def load_sudoku_board(board_to_load):
 
 	# Allow user to attempt to solve the puzzle
 	option_1 = 'Attempt to solve this puzzle.'
-	valid_selections[1] = open_puzzle
+	valid_selections[1] = user_solve
 
 	# Allow user to confirm the puzzle is valid
 	option_2 = 'Confirm this is a valid sudoku puzzle (confirm there is at least one possible solution).'
@@ -120,9 +245,9 @@ def load_sudoku_board(board_to_load):
 
 	# Allow user to return to puzzle selection
 	option_4 = 'Return to the Main Menu.'
-	valid_selections[4] = load_random_sudoku
+	valid_selections[4] = None
 
-	
+
 	running = True
 
 	while running:
@@ -136,7 +261,7 @@ def load_sudoku_board(board_to_load):
 		3. {option_3}
 		4. {option_4}
 
-		Or enter 'Q' to quite Console Sudoku.
+		Or enter 'Q' to quit Console Sudoku.
 		""")
 
 		user_selection = input('Enter your selection: ')
@@ -238,7 +363,7 @@ def present_options():
 		1. {option_1}
 		2. {option_2}
 
-		Or enter 'Q' to quite Console Sudoku.
+		Or enter 'Q' to quit Console Sudoku.
 		""")
 
 		user_selection = input('Enter your selection: ')
@@ -260,22 +385,6 @@ def present_options():
 
 	print('Thank you for using Console Sudoku.')
 
-
-
-def user_solve(puzzle_for_user_to_solve):
-
-	# Allow the user to move the 'cursor'
-
-	# Allow the user to set the number in a cell
-
-	# Allow the user to submit a solution
-
-	# Allow the user to ask if the puzzle is possible
-
-	# Allow the user to quit, returning them to puzzle selection
-
-	# Allow the user to quite Console Sudoku
-	pass
 
 
 # when run as a script, run the console sudoku interface

@@ -143,7 +143,8 @@ def is_valid_sudoku(board_to_test):
 		'invalid_digit': the invalid digit placed at the invalid row and column
 	"""
 
-	# save a duplicate of the test board, that way we can check the validity without modifying the  
+	# save a duplicate of the test board, that way we can check the validity without modifying the 
+	temp_board = board_to_test.copy() 
 
 	# iterate over rows (y values)
 	for row in range(9):
@@ -151,24 +152,24 @@ def is_valid_sudoku(board_to_test):
 		for col in range(9):
 
 			# First, check that the cell at the current row and column is not empty
-			if board_to_test[row][col] == 0:
+			if temp_board[row][col] == 0:
 
 				# If the cell is not filled, then the provided board is not complete. Therefore it is not valid.
 				return {'is_valid': False, 'invalid_row': row, 'invalid_column': col, 'invalid_digit': 0}
 
 			# Then, check the value of the cell.
 			# Remove the value of the cell and store it as a temp variable.
-			temp = board_to_test[row][col]
-			board_to_test[row][col] = 0
+			temp = temp_board[row][col]
+			temp_board[row][col] = 0
 
 			# Then attempt to put the same value back in the board
-			if not is_placement_possible(y=row, x=col, n=temp, board=board_to_test):
+			if not is_placement_possible(y=row, x=col, n=temp, board=temp_board):
 
 				# If it is not possible to place this value in the board, then the provided board is not valid
 				return {'is_valid': False, 'invalid_row': row, 'invalid_column': col, 'invalid_digit': temp}
 
 			# If it was valid, replace the number and continue searching
-			board_to_test[row][col] = temp
+			temp_board[row][col] = temp
 
 	# If all cells are valid, then we can return True.
 	# Return an empty coordinate set 
@@ -180,18 +181,20 @@ def confirm_puzzle_is_solvable(puzzle):
 	"""
 	Solves and validates a 
 	"""
-	if not solve_sudoku(board_to_solve=puzzle):
+	temp_board = puzzle.copy()
+
+	if not solve_sudoku(board_to_solve=temp_board):
 		print("This particular Sudoku puzzle cannot be solved.") 
 		return
 
-	validation = is_valid_sudoku(board_to_test=puzzle)
+	validation = is_valid_sudoku(board_to_test=temp_board)
 
 	if validation['is_valid']:
 		print("At least one valid solution for the provided puzzle exists.") 
 
 	else:
 		print("Error! The provided puzzle is possible to solve, but a valid solution was not found.")
-		 
+	
 	return
 
 
@@ -200,15 +203,16 @@ def validate_user_submission(user_board):
 	"""
 	Solves and validates a user-provided board
 	"""
-	validation = is_valid_sudoku(board_to_test=user_board)
+	temp = user_board.copy()
+
+	validation = is_valid_sudoku(board_to_test=temp)
 
 	if validation['is_valid']:
-		return "Solved! Nice work." 
+		return ["Solved! Nice work."] 
 
 	else:
-		return f"""The provided submission is not valid. 
-			The digit in Row {validation['invalid_row']}, Column {validation['invalid_row']} 
-			cannot be {validation['invalid_digit']}.""" 
+		return ["The provided submission is not valid.", 
+			f"The digit in Row {validation['invalid_row']}, Column {validation['invalid_row']} cannot be {validation['invalid_digit']}."]
 
 
 
