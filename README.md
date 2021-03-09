@@ -16,4 +16,4 @@ This menu allows you to perform the following options:
  - Generate and view a valid solution to the randomly selected puzzle (Bonus A of the Assignment)
  - Return to the Console Sudoku Main Menu
 
-Note: Additional screenshots of the menus and functions of Console Sudoku can also be found in the accompanying `HollandCS340PortfolioProject.pdf` file.
+Note: Additional screenshots of the menus and functions of Console Sudoku can also be found in the accompanying `HollandCS325PortfolioProject.pdf` file.
