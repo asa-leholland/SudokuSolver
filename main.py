@@ -1,43 +1,48 @@
 # main.py
 # Author: Asa LeHolland
 
-# import numpy to handle array board
-import numpy as np 
-
-# from termcolor import colored, cprint
-
-
 def npdisplay(board):
 	"""
-	Function to convert the provided puzzle to a numpy array, which is output as a square board
+	Function to dislay the provded board to the user through a series of print statements to the console.
 	"""
 
-	#   0 1 2 3 4 5 6 7 8	(purple)
-	# 0 1 2 3 4 5 6 7 8 9 	(purple first char, then white background with black text)
+	# Output the column header and establish the column borders
 	print()
-
 	column_header = '                           Columns             '
 	print(column_header)
 	column_header = '            | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8'
 	print(column_header)
 	spacer = '            |   |   |   |   |   |   |   |   |  '
 	print(spacer)
-
 	row_separator = '       -----|---|---|---|---|---|---|---|---|---'
 	print(row_separator)
 
+	# Iterate over each row in the board
 	for index, row in enumerate(board):
+
+		# at the middle row, add a 'Rows' label on the left
 		if index == 4:
 			print(' Rows  ', end='')
+
+		# On all other rows, add empty space to buffer the Sudoku board off the edge of the console
 		else:
 			print('       ', end='')
 
+		# Add the row number
 		print(f' {str(index)}   ', end='|')
+
+		# For each digit placed in the provided board, display it
 		for digit in row:
+
+			# If the digit is zero, display an empty square instead
 			if digit == 0:
 				print('  ', end=' |')
+
+			# Otherwise fill the cell with the content from the provided board
 			else:
 				print(' ' + str(digit) + ' ', end='|')
+
+		# At the end of each row, add a row of dashed lines to separate each row
 		print('\n' + row_separator)
 
 
@@ -205,7 +210,7 @@ def is_valid_sudoku(board_to_test):
 
 def confirm_puzzle_is_solvable(puzzle):
 	"""
-	Solves and validates a 
+	Solves and validates a provided puzzle
 	"""
 
 	# To test the puzzle's capacity to be solvable, we need to make a copy of the provided puzzle board.
@@ -213,33 +218,40 @@ def confirm_puzzle_is_solvable(puzzle):
 	# We finally turn the result into a list to ensure that this remains a copy instead of referencing the same original puzzle 
 	temp_board = list(puzzle)
 
+	# If the problem is not possible to be solved, then we can return to the user that the puzzle cannot be solved.
 	if not solve_sudoku(board_to_solve=list(temp_board)):
 		print("This particular Sudoku puzzle cannot be solved.")
 		return
 
+	# As long as the puzzle can be solved, perform a validation to see if it is correct.
 	validation = is_valid_sudoku(board_to_test=temp_board)
 
+	# If the validation succeeds, then we can confirm there is at least one valid solution.
 	if validation['is_valid']:
 		print("At least one valid solution for the provided puzzle exists.") 
 
+	# If the validation is unsuccessful, it means that there is likely an error in the algorithm. In this case there should be a valid solution.
 	else:
 		print("Error! The provided puzzle is possible to solve, but a valid solution was not found.")
 	
-	return
-
 
 
 def validate_user_submission(user_board):
 	"""
 	Solves and validates a user-provided board
 	"""
+
+	# Duplicate the provided board so no changes are made to the user board
 	temp = user_board.copy()
 
+	# Perform the validation check
 	validation = is_valid_sudoku(board_to_test=temp)
 
+	# If the validation determines the board to be valid, return a string telling the user that they have solved the puzzle.
 	if validation['is_valid']:
 		return ["Solved! Nice work."] 
 
+	# If the validation check does not determine the board is valid let the user know and display which cell (column, row) and contained value is invalid.
 	else:
 		return ["The provided submission is not valid.", 
 			f"The digit in Row {validation['invalid_row']}, Column {validation['invalid_column']} cannot be {validation['invalid_digit']}."]
